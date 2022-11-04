@@ -19,30 +19,32 @@ public class xifrat_asimetric_a {
 
 	public static void main(String[] args) {
 		
-		try {	
-			
-			  File inf = new File("fitxer.txt");
-	
-			  FileInputStream is = new FileInputStream(inf);
-	
-			  FileOutputStream os = new FileOutputStream("fitxer_sortida.txt");
-	
-			  byte[] buffer = new byte[(int) inf.length()];
-	
-			  is.read(buffer);
-			  os.write(buffer);
-			  
-			  os.close();
-			  is.close();
-			  
-		/*  } catch (Exception e) {
-			  e.printStackTrace();
-		  }
+		String content = "Això es un missatge per a xifrar";
 		
-		try {*/
-			
+		try {	
+			/********  Xifrar (funciona 100%) *********/
+			/*
 			KeyPairGenerator keygen = KeyPairGenerator.getInstance("RSA");
 			KeyPair keypair = keygen.generateKeyPair(); 	
+			Cipher rsaCipher = Cipher.getInstance("RSA");	//<--- Objecte per xifrar
+			
+			File inf = new File("fitxer.txt");
+			FileInputStream is = new FileInputStream(inf);
+			FileOutputStream os = new FileOutputStream(inf);
+
+			byte[] buffer = content.getBytes();
+			
+			rsaCipher.init(Cipher.ENCRYPT_MODE, keypair.getPrivate());
+			byte[] bufferXifrat = rsaCipher.doFinal(buffer);
+			
+			os.write(bufferXifrat);
+			os.close();
+			*/
+			
+			/********  Xifrar (funciona 100%) *********/
+			
+			KeyPairGenerator keygen = KeyPairGenerator.getInstance("RSA");
+			KeyPair keypair = keygen.generateKeyPair();
 			
 			KeyFactory keyfac = KeyFactory.getInstance("RSA");
 			
@@ -52,35 +54,21 @@ public class xifrat_asimetric_a {
 			BigInteger exponent = publicKeySpec.getPublicExponent();
 			
 			RSAPublicKeySpec keyspec2 = new RSAPublicKeySpec(modul, exponent);
-			
 			PublicKey public_key = keyfac.generatePublic(keyspec2);
 			
-			inf.init(Cipher.DECRYPT_MODE, public_key);
-			/*
-			PublicKey publicKey = keypair.getPublic();
-			PrivateKey privateKey = keypair.getPrivate();
+			Cipher rsaCipher = Cipher.getInstance("RSA");	// ??????
 			
+			File inf = new File("fitxer2.txt");
+			if(!inf.exists()) { inf.createNewFile();}
+			FileOutputStream os = new FileOutputStream(inf);
+
+			byte[] buffer = content.getBytes();
 			
-			byte[] pubEncBytes = publicKey.getEncoded(); 
+			rsaCipher.init(Cipher.ENCRYPT_MODE, public_key);
+			byte[] bufferXifrat = rsaCipher.doFinal(buffer);
 			
-			String pubEncBase64 = new BASE64Encoder().encode(pubEncBytes);
-			
-			
-			File clauPublica = new File("clauPublica.txt");
-			clauPublica.createNewFile();
-			FileOutputStream fos2 = new FileOutputStream(clauPublica);
-			fos.write(publicKey);
-			
-			
-			/*
-			File clauPrivada = new File("clauPrivada.txt");
-			if(!clauPrivada.exists()) {
-				clauPrivada.createNewFile();
-			}
-			*/
-			
-			
-			//Cipher rsaCipher = Cipher.getInstance("RSA"); 	
+			os.write(bufferXifrat);
+			os.close();
 			
 			/* Fitxa 31 powerPoint
 			 * https://www.google.com/search?q=cifrar+archivo+con+rsa+con+clave+asimetrica+java&ei=HBlQY9jsAYqN9u8Pj5id6A8&oq=cifrar+archivo+con+rsa+java&gs_lp=ugYGCAEQARgJEgxnd3Mtd2l6LXNlcnC4AQH4AQEqAggAMggQIRjDBBigAcICChAAGEcY1gQYsAPCAg4QABjkAhjWBBiwA9gBAcICChAhGMMEGAoYoAGQBg1I-CVQ0gpYwA1wAXgByAEAkAEAmAGLAaAB5gKqAQMwLjPiAwQgTRgB4gMEIEEYAOIDBCBGGAGIBgE&sclient=gws-wiz-serp
