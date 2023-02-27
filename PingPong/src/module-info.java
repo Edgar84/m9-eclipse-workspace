@@ -1,0 +1,9 @@
+/**
+ * 
+ */
+/**
+ * @author Edgar
+ *
+ */
+module PingPong {
+}
